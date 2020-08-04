@@ -1,0 +1,12 @@
+<<<<<<< HEAD
+{
+    "variants": {
+		"normal": {"model":"gameconsole:attack_block"}
+	}
+=======
+{
+    "variants": {
+		"normal": {"model":"gameconsole:attack_block"}
+	}
+>>>>>>> 2b2de77... None2
+}

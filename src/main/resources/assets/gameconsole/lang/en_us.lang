@@ -1,0 +1,13 @@
+<<<<<<< HEAD
+item.blankcircuitboard.name=blankcircuitboard
+
+tile.wire_copper.name=wire_copper
+
+entity.gameconsole.zombie_fashion.name=Zombie_Fashion
+=======
+item.blankcircuitboard.name=blankcircuitboard
+
+tile.wire_copper.name=wire_copper
+
+entity.gameconsole.zombie_fashion.name=Zombie_Fashion
+>>>>>>> 2b2de77... None2
