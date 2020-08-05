@@ -1,6 +1,6 @@
 package lyz.gc;
 
-public class Chars {
+public class Chars {//All chars
 
     public static final String MODID = "gameconsole";
     public static final String NAME = "Game Console";
