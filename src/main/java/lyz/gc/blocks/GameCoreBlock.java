@@ -30,7 +30,7 @@ public class GameCoreBlock extends BlockBase {
             TileEntity entity = worldIn.getTileEntity(pos);
             if (entity instanceof TileEntityGameCore){
                 TileEntityGameCore core = (TileEntityGameCore)entity;
-                core.addName(playerIn.getUniqueID());//加入游戏
+                //core.addName(playerIn.getUniqueID());//加入游戏
                 if (/*core.getPlayerNum() == 8 &&*/ !core.isBegin()){
                     core.begin();
                 }

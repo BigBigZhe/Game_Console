@@ -68,15 +68,10 @@ public class TileEntityGameCore extends TileEntity implements ITickable {
 
     public void begin() {
         isBegin = true;
-        EntityPlayer entityPlayer = world.getPlayerEntityByUUID(names[0]);
-        entityPlayer.setPositionAndUpdate(pos.getX(), pos.getY() + 10, pos.getZ());
-        /*BlockPos pos = this.pos;
+        /*EntityPlayer entityPlayer = world.getPlayerEntityByUUID(names[0]);
+        BlockPos pos = this.pos;
         MessageTpPlayer message = new MessageTpPlayer(pos, names[0]);
         NetWorkLoader.instance.sendToServer(message);*/
-    }
-
-    public void end(){
-        isBegin = false;
     }
 
     public boolean addPlayer(EntityPlayer playerIn){
@@ -191,7 +186,8 @@ public class TileEntityGameCore extends TileEntity implements ITickable {
             win();
         }
         if (!world.isRemote && isBegin){
-            int index = round % 10;
+            choose();
+            /*int index = round % 10;
             if (index == 4){
                 choose();
             }
@@ -200,7 +196,7 @@ public class TileEntityGameCore extends TileEntity implements ITickable {
             }
             else if (index == 9){
                 ready();
-            }
+            }*/
 
         }
     }
@@ -242,13 +238,13 @@ public class TileEntityGameCore extends TileEntity implements ITickable {
             roundTime = 0;//重置时间
             tick = 0;
             isChoosing = true;//设置状态
-            setCanMoveChess(false);//棋子不可选取
-            tpChoose();//tp玩家
+            //setCanMoveChess(false);//棋子不可选取
+            //tpChoose();//tp玩家
             resetChosenChess();//重置棋子
         }
         moveChosen();
-        checkChosen();
-        if (roundTime % 7 == 6){
+        //checkChosen();
+        /*if (roundTime % 7 == 6){
             clearGlass(roundTime / 7);
         }
         if (roundTime == 32){
@@ -256,7 +252,7 @@ public class TileEntityGameCore extends TileEntity implements ITickable {
             isChoosing = false;
             addChess();
             tpBack();
-        }
+        }*/
     }
     //准备阶段
     private void ready(){
@@ -290,22 +286,28 @@ public class TileEntityGameCore extends TileEntity implements ITickable {
     }
 
     private void win(){
+        isBegin = false;
         //TODO
     }
     //重置选秀棋子
     private void resetChosenChess(){
         chosenLocation = new int[]{0, 36, 72, 108, 144, 180, -36, -72, -108, -144};
-        for (EntityBase entity:chooseEntities){
-            entity = new ZombieFashion(world);
-            //TODO
+        for (int i = 0; i < 10; i++){
+            chooseEntities[i] = new ZombieFashion(world);//TODO
+            chooseEntities[i].setPosition(this.pos.getX() + 2.5 * Math.cos(chosenLocation[i] * Math.PI / 180),
+                    5, this.pos.getY() + 2.5 * Math.sin(chosenLocation[i] * Math.PI / 180));
+            world.spawnEntity(chooseEntities[i]);
         }
     }
     //移动选秀棋子
     private void moveChosen(){
         for (int i = 0; i < 10; i++) {
-            chosenLocation[i] += 5;
+            chosenLocation[i] += 1;
         }
-        //TODO
+        for (int i = 0; i < 10; i++){
+            chooseEntities[i].setPosition(this.pos.getX() + 2.5 * Math.cos(chosenLocation[i] * Math.PI / 180),
+                    5, this.pos.getZ() + 2.5 * Math.sin(chosenLocation[i] * Math.PI / 180));
+        }
     }
     //碰撞选秀棋子
     private void checkChosen(){

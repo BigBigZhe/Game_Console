@@ -1,12 +1,5 @@
-<<<<<<< HEAD
 {
     "variants": {
 		"normal": {"model":"gameconsole:alternative_block"}
 	}
-=======
 {
-    "variants": {
-		"normal": {"model":"gameconsole:alternative_block"}
-	}
->>>>>>> 2b2de77... None2
-}
