@@ -1,5 +1,6 @@
 package lyz.gc.items;
 
+import lyz.gc.api.chess.Weapon;
 import lyz.gc.api.item.ItemBase;
 import lyz.gc.loader.ItemsLoader;
 import lyz.gc.loader.NetWorkLoader;
@@ -19,10 +20,14 @@ public class EntityItem extends ItemBase {
 
     private EntityPlayer ownPlayer;//棋子拥有人
     private int[] nxy = new int[3];//num x y
+    private Weapon[] weapons = new Weapon[3];//装备
     private int type;
 
     public EntityItem(String name) {
         super(name);
+        for (Weapon weapon:weapons){
+            weapon = Weapon.NONE;
+        }
         ItemsLoader.ITEMS.add(this);
     }
 

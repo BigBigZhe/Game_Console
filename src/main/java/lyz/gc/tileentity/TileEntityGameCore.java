@@ -1,5 +1,6 @@
 package lyz.gc.tileentity;
 
+import lyz.gc.api.GameMath;
 import lyz.gc.api.chess.PlayerInfo;
 import lyz.gc.api.entity.EntityBase;
 import lyz.gc.entities.ZombieFashion;
@@ -58,22 +59,19 @@ public class TileEntityGameCore extends TileEntity implements ITickable {
         MessageTpPlayer message = new MessageTpPlayer(pos, names[0]);
         NetWorkLoader.instance.sendToServer(message);*/
     }
-
+    //加入游戏//
     public boolean addPlayer(EntityPlayer playerIn){
         UUID n = playerIn.getUniqueID();
         for (int i = 0; i < 8; i++){
             if (names[i] == null){
                 names[i] = n;
                 playerNum++;
-                System.out.println("In");
                 return true;
             }
             if (Objects.equals(names[i], n)){
-                System.out.println("Already");
                 return false;
             }
         }
-        System.out.println("Full");
         return false;
     }
     //加人//
@@ -86,7 +84,7 @@ public class TileEntityGameCore extends TileEntity implements ITickable {
             }
         }
     }
-
+    //主循环
     @Override
     public void update() {
         tick++;
@@ -201,11 +199,12 @@ public class TileEntityGameCore extends TileEntity implements ITickable {
         isBegin = false;
         //TODO
     }
-    //重置选秀棋子
+    //重置选秀棋子//
     private void resetChosenChess(){
         chosenLocation = new int[]{0, 36, 72, 108, 144, 180, 216, 252, 288, 324};
         for (int i = 0; i < 10; i++){
             chooseEntities[i] = new ZombieFashion(world);//TODO
+            chooseEntities[i].setWeapon(new GameMath().randomWeapon(), 0);
             chooseEntities[i].setPosition(this.pos.getX() + 2.5 * Math.cos(chosenLocation[i] * Math.PI / 180) + 0.5,
                     4, this.pos.getZ() + 2.5 * Math.sin(chosenLocation[i] * Math.PI / 180) + 0.5);
             world.spawnEntity(chooseEntities[i]);
@@ -228,10 +227,7 @@ public class TileEntityGameCore extends TileEntity implements ITickable {
         for (int i = 0; i < 8; i++){
             if (names[i] != null){
                 EntityPlayer player = world.getPlayerEntityByUUID(names[i]);
-                if (player
-                        .getHeldItemMainhand()
-                        .getItem()
-                        == ItemsLoader.STAFF){
+                if (player.getHeldItemMainhand().getItem() == ItemsLoader.STAFF){
                     for (int j = 0; j < 10; j++){
                         if (Math.pow(this.pos.getX() + 2.5 * Math.cos(chosenLocation[j]) - player.getPosition().getX(), 2)
                         + Math.pow(this.pos.getZ() + 2.5 * Math.sin(chosenLocation[j]) - player.getPosition().getZ(), 2) <= 0.5
@@ -246,7 +242,7 @@ public class TileEntityGameCore extends TileEntity implements ITickable {
             }
         }
     }
-
+    //清除选秀屏障
     private void clearGlass(int index){
         int glassLocation[][] = {{5, -6, 0},{5, -6, 0},{5, -6, 0}, {-5, -6, 0}, {4, -6, 4},
                 {-4, -6, -4}, {0, -6, 5}, {0, -6, -5}, {-4, -6, 4}, {4, -6, -4}};//TODO

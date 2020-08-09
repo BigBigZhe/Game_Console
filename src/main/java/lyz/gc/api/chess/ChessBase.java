@@ -1,20 +1,25 @@
 package lyz.gc.api.chess;
 
 public enum ChessBase {
-    Base("base", 0, 0, 0, 0, 0, 0);
+    Base("base", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+    ;
 
-    private String name;
-    private int health, walkSpeed, attackSpeed, attackPower, magicPower, attackDistance;
+    private final String name;
+    private int health, walkSpeed, attackSpeed, damage, magicDamage, attackDistance, criticalChance, criticalDamage, armor, spellResistance;
 
-    ChessBase(String name, int health, int walkSpeed, int attackSpeed, int attackPower,
-              int magicPower, int attackDistance) {
+    ChessBase(String name, int health, int walkSpeed, int attackSpeed, int damage,
+              int magicDamage, int attackDistance, int criticalChance, int criticalDamage, int armor, int spellResistance) {
         this.name = name;
         this.health = health;
         this.walkSpeed = walkSpeed;
         this.attackSpeed = attackSpeed;
-        this.attackPower = attackPower;
-        this.magicPower = magicPower;
+        this.damage = damage;
+        this.magicDamage = magicDamage;
         this.attackDistance = attackDistance;
+        this.criticalChance = criticalChance;
+        this.criticalDamage = criticalDamage;
+        this.armor = armor;
+        this.spellResistance = spellResistance;
     }
 
     public String toString()
@@ -40,14 +45,30 @@ public enum ChessBase {
     }
 
     public int getAttackPower() {
-        return attackPower;
+        return damage;
     }
 
     public int getMagicPower() {
-        return magicPower;
+        return magicDamage;
     }
 
     public int getAttackDistance() {
         return attackDistance;
+    }
+
+    public int getCriticalChance() {
+        return criticalChance;
+    }
+
+    public int getCriticalDamage() {
+        return criticalDamage;
+    }
+
+    public int getArmor() {
+        return armor;
+    }
+
+    public int getSpellResistance() {
+        return spellResistance;
     }
 }

@@ -1,6 +1,5 @@
-
 item.blankcircuitboard.name=blankcircuitboard
 
 tile.wire_copper.name=wire_copper
 
-entity.gameconsole.zombie_fashion.name=Zombie_Fashion
+entity.zombie_fashion.name=Zombie_Fashion

@@ -66,7 +66,7 @@ public class MessageCore implements IMessage {
         private void processMessage(MessageCore message, EntityPlayerMP player) {
             TileEntity tileEntity = player.world.getTileEntity(message.pos);
             TileEntityGameCore tile = (TileEntityGameCore) tileEntity;
-            tile.setUUID(message.name);
+            tile.addName(message.name);
             tile.setPlayerNum(message.meta);
         }
     }
