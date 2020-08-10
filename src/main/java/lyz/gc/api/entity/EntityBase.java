@@ -100,29 +100,17 @@ public class EntityBase extends EntityAnimal {
     }
 
     //////////////////////////////////////////////////////////////////////
-    public boolean isCanPick() {
-        return canPick;
-    }
+    public boolean isCanPick() { return canPick; }
 
-    public void setCanPick(boolean canPick) {
-        this.canPick = canPick;
-    }
+    public void setCanPick(boolean canPick) { this.canPick = canPick; }
 
-    public EntityPlayer getPlayer() {
-        return player;
-    }
+    public EntityPlayer getPlayer() { return player; }
 
-    public void setPlayer(EntityPlayer player) {
-        this.player = player;
-    }
+    public void setPlayer(EntityPlayer player) { this.player = player; }
 
-    public int[] getXy() {
-        return xy;
-    }
+    public int[] getXy() { return xy; }
 
-    public void setXy(int[] xy) {
-        this.xy = xy;
-    }
+    public void setXy(int[] xy) { this.xy = xy; }
 
     public void setWeapon(Weapon weapon, int dex) { this.weapons[dex] = weapon; }
 

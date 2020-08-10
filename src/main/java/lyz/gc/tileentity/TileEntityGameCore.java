@@ -35,7 +35,12 @@ public class TileEntityGameCore extends TileEntity implements ITickable {
     private int[] chosenLocation = new int[10];//选秀棋子位置
     private int tick = 0, roundTime = 0, round = 0, liveNum = 0;//20tick = 1roundTime
     private boolean isBeating = false, isReadying = false, isChoosing = false;//游戏状态
-    private EntityBase[] chooseEntities = new EntityBase[10];
+    private EntityBase[] chooseEntities = new EntityBase[10];//选秀棋子
+    /*1-1 ~ 1-2 野怪
+    * 2-1 ~ 2-3 对抗
+    * 2-4 选秀
+    * 2-5 ~ 2-6 对抗
+    * 2-7 野怪*/
 
     public TileEntityGameCore(){ }
 
@@ -158,7 +163,7 @@ public class TileEntityGameCore extends TileEntity implements ITickable {
             clearGlass(roundTime / 7);
         }
         if (roundTime == 32){
-            roundTimeChange(0);
+            roundTimeChange();
             isChoosing = false;
             addChess();
             tpBack();
@@ -173,7 +178,7 @@ public class TileEntityGameCore extends TileEntity implements ITickable {
             setCanMoveChess(true);
         }
         if (roundTime == 20){
-            roundTimeChange(2);
+            roundTimeChange();
             tpChessTo();
             doTolerant();
         }
@@ -189,12 +194,12 @@ public class TileEntityGameCore extends TileEntity implements ITickable {
         boolean t = chessRun();
         if (t){
             isBeating = false;
-            roundTimeChange(1);
+            roundTimeChange();
             resetChess();
             tpBack();
         }
     }
-
+    //获胜
     private void win(){
         isBegin = false;
         //TODO
@@ -205,6 +210,7 @@ public class TileEntityGameCore extends TileEntity implements ITickable {
         for (int i = 0; i < 10; i++){
             chooseEntities[i] = new ZombieFashion(world);//TODO
             chooseEntities[i].setWeapon(new GameMath().randomWeapon(), 0);
+            chooseEntities[i].setCanPick(false);
             chooseEntities[i].setPosition(this.pos.getX() + 2.5 * Math.cos(chosenLocation[i] * Math.PI / 180) + 0.5,
                     4, this.pos.getZ() + 2.5 * Math.sin(chosenLocation[i] * Math.PI / 180) + 0.5);
             world.spawnEntity(chooseEntities[i]);
@@ -265,9 +271,18 @@ public class TileEntityGameCore extends TileEntity implements ITickable {
     private void doTolerant(){
         //TODO
     }
-
-    private void roundTimeChange(int mode){
-        //TODO
+    //自动进行回合数改变//
+    private void roundTimeChange(){
+        int m = roundTime % 10;
+        if (m == 1 || m == 2 || m == 3 || m == 4 || m == 5 || m == 6){
+            if (roundTime == 12){
+                roundTime = 21;
+                return;
+            }
+            roundTime++;
+        }else{
+            roundTime += 4;
+        }
     }
 
     private void addChess(){
@@ -315,7 +330,7 @@ public class TileEntityGameCore extends TileEntity implements ITickable {
     public int getPlayerNum(){
         return this.playerNum;
     }
-    //数据持久化
+    //数据持久化//////////////////////////////////////////未完
     @Override
     public void readFromNBT(NBTTagCompound compound){
         super.readFromNBT(compound);
