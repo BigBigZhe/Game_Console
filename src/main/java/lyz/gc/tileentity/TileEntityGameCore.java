@@ -4,6 +4,7 @@ import lyz.gc.api.GameMath;
 import lyz.gc.api.chess.PlayerInfo;
 import lyz.gc.api.entity.EntityBase;
 import lyz.gc.entities.ZombieFashion;
+import lyz.gc.items.EntityItem;
 import lyz.gc.loader.ItemsLoader;
 import lyz.gc.loader.NetWorkLoader;
 import lyz.gc.network.MessageTpPlayer;
@@ -17,6 +18,7 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.server.management.PlayerChunkMapEntry;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
@@ -53,7 +55,7 @@ public class TileEntityGameCore extends TileEntity implements ITickable {
         }
         return -1;
     }
-
+    //开始游戏
     public void begin() {
         isBegin = true;
         for (PlayerInfo playerInfo: players) {
@@ -269,7 +271,30 @@ public class TileEntityGameCore extends TileEntity implements ITickable {
     }
 
     private void doTolerant(){
-        //TODO
+        for (UUID uuid:names){
+            EntityPlayer player = world.getPlayerEntityByUUID(uuid);
+            if (player != null){
+                ItemStack stack = player.getHeldItemMainhand();
+                if (stack.getItem() == ItemsLoader.ZF1){
+                    player.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(ItemsLoader.STAFF));
+                    int[] xy = ((EntityItem)stack.getItem()).getPos();
+                    int[] offsetX = {-21, -4, 13};
+                    int offsetY = -8;
+                    int[] offsetZ = {-20, -4, 12};
+                    /*BlockPos normalPos = this.pos.offset(EnumFacing.EAST, offsetX[i])
+                                    .offset(EnumFacing.UP, offsetY).offset(EnumFacing.SOUTH, offsetZ[j]);
+                    for (int k = 0; k < 8; k++) {
+                        for (int l = 0; l < 9; l++) {
+                            BlockPos blockPos = normalPos.offset(EnumFacing.EAST, k).offset(EnumFacing.SOUTH, l);
+                            TileEntity entity = world.getTileEntity(blockPos);
+                            if (entity instanceof TileEntityAttackBlock){
+                                ((TileEntityAttackBlock)entity).setCanMove(move);
+                            }
+                        }
+                    }*/
+                }
+            }
+        }
     }
     //自动进行回合数改变//
     private void roundTimeChange(){
@@ -283,10 +308,6 @@ public class TileEntityGameCore extends TileEntity implements ITickable {
         }else{
             roundTime += 4;
         }
-    }
-
-    private void addChess(){
-        //TODO
     }
 
     private void resetChess(){
