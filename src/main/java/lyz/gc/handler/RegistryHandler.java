@@ -23,22 +23,22 @@ import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
 public class RegistryHandler {
 
 	public static int entityID = 200;
-
+	//方块
 	@SubscribeEvent
 	public static void onBlockRegister(RegistryEvent.Register<Block> event) {
 		event.getRegistry().registerAll(BlocksLoader.BLOCKS.toArray(new Block[0]));
 	}
-	
+	//物品
 	@SubscribeEvent
 	public static void onItemRegister(RegistryEvent.Register<Item> event) {
 		event.getRegistry().registerAll(ItemsLoader.ITEMS.toArray(new Item[0]));
 	}
-
+	//实体
 	@SubscribeEvent
 	public static void onEntityRegister(RegistryEvent.Register<EntityEntry> event){
 		event.getRegistry().register(EntitiesBuild(ZombieFashion.class, "zombie_fashion"));
 	}
-
+	//模型
 	@SubscribeEvent
     public static void onModelRegister(ModelRegistryEvent event) {
 		for(Item item:ItemsLoader.ITEMS.toArray(new Item[0])) {
@@ -46,7 +46,7 @@ public class RegistryHandler {
 		}
 		RenderingRegistry.registerEntityRenderingHandler(ZombieFashion.class, RenderZombieFashion::new);
 	}
-
+	//实体注册轮子
 	private static EntityEntry EntitiesBuild(Class<? extends Entity> entityClass, String entityName){
 		return EntityEntryBuilder.create().entity(entityClass)
 				.id(new ResourceLocation(Chars.MODID, entityName), entityID++).name(entityName)
