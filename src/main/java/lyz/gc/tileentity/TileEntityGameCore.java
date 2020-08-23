@@ -1,8 +1,11 @@
 package lyz.gc.tileentity;
 
+import lyz.gc.ModIntegers;
 import lyz.gc.api.GameMath;
+import lyz.gc.api.chess.ChessBase;
 import lyz.gc.api.chess.PlayerInfo;
 import lyz.gc.api.entity.EntityBase;
+import lyz.gc.api.entity.EntityBeating;
 import lyz.gc.entities.ZombieFashion;
 import lyz.gc.items.EntityItem;
 import lyz.gc.loader.ItemsLoader;
@@ -20,6 +23,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 
@@ -61,6 +65,7 @@ public class TileEntityGameCore extends TileEntity implements ITickable {
         for (PlayerInfo playerInfo: players) {
             playerInfo = new PlayerInfo();
         }
+        changeChessTo();
         /*EntityPlayer entityPlayer = world.getPlayerEntityByUUID(names[0]);
         BlockPos pos = this.pos;
         MessageTpPlayer message = new MessageTpPlayer(pos, names[0]);
@@ -103,7 +108,7 @@ public class TileEntityGameCore extends TileEntity implements ITickable {
             win();
         }
         if (!world.isRemote && isBegin){
-            choose();
+
             /*int index = round % 10;
             if (index == 4){
                 choose();
@@ -181,7 +186,6 @@ public class TileEntityGameCore extends TileEntity implements ITickable {
         }
         if (roundTime == 20){
             roundTimeChange();
-            tpChessTo();
             doTolerant();
         }
     }
@@ -191,6 +195,7 @@ public class TileEntityGameCore extends TileEntity implements ITickable {
             roundTime = 0;
             tick = 0;
             isBeating = true;
+            changeChessTo();
             setCanMoveChess(false);
         }
         boolean t = chessRun();
@@ -313,9 +318,37 @@ public class TileEntityGameCore extends TileEntity implements ITickable {
     private void resetChess(){
         //TODO
     }
-
-    private void tpChessTo(){
-        //TODO
+    //对战开始
+    private void changeChessTo(){
+        int[] offsetX = {-21, -4, 13};
+        int offsetY = -8;
+        int[] offsetZ = {-20, -4, 12};
+        for (int i = 0; i < 3; i++){
+            for (int j = 0; j < 3; j++){
+                if (i == 1 && j == 1){ continue; }
+                BlockPos normalPos = this.pos.offset(EnumFacing.EAST, offsetX[i])
+                        .offset(EnumFacing.UP, offsetY).offset(EnumFacing.SOUTH, offsetZ[j]);
+                for (int k = 0; k < 8; k++) {
+                    for (int l = 0; l < 9; l++) {
+                        BlockPos blockPos = normalPos.offset(EnumFacing.EAST, k).offset(EnumFacing.SOUTH, l);
+                        TileEntity entity = world.getTileEntity(blockPos);
+                        if (entity instanceof TileEntityAttackBlock){
+                            TileEntityAttackBlock tile = (TileEntityAttackBlock)entity;
+                            if (tile.isHasChess()){
+                                BlockPos poses = blockPos.add(0.5D, 1.0D, 0.5D);
+                                ZombieFashion zombie = world.getEntitiesWithinAABB(ZombieFashion.class, new AxisAlignedBB(poses)).get(0);
+                                if (zombie != null) {
+                                    zombie.setInvisible(true);
+                                    EntityBeating beating = new EntityBeating(world, ModIntegers.CHICKEN_GOLD, getPlayerNumber(zombie.getPlayer()), -1, ChessBase.Base, zombie.getWeapons());
+                                    beating.setPosition(poses.getX(), poses.getY(), poses.getZ());
+                                    world.spawnEntity(beating);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
     //tp玩家 参数:位置//
     private void tpPlayers(int[][] locate){

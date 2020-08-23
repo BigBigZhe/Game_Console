@@ -1,8 +1,10 @@
 package lyz.gc.handler;
 
 import lyz.gc.Chars;
-import lyz.gc.entities.ZombieFashion;
-import lyz.gc.entitiesrender.RenderZombieFashion;
+import lyz.gc.api.entity.EntityBeating;
+import lyz.gc.entities.*;
+import lyz.gc.entities.beating.*;
+import lyz.gc.entitiesrender.*;
 import lyz.gc.loader.BlocksLoader;
 import lyz.gc.loader.ItemsLoader;
 import net.minecraft.block.Block;
@@ -37,6 +39,8 @@ public class RegistryHandler {
 	@SubscribeEvent
 	public static void onEntityRegister(RegistryEvent.Register<EntityEntry> event){
 		event.getRegistry().register(EntitiesBuild(ZombieFashion.class, "zombie_fashion"));
+		event.getRegistry().register(EntitiesBuild(Cow_Gold.class, "cow_gold"));
+		event.getRegistry().register(EntitiesBuild(EntityBeating.class, "entity_beating"));
 	}
 	//模型
 	@SubscribeEvent
@@ -45,6 +49,8 @@ public class RegistryHandler {
         	ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
 		}
 		RenderingRegistry.registerEntityRenderingHandler(ZombieFashion.class, RenderZombieFashion::new);
+		RenderingRegistry.registerEntityRenderingHandler(Cow_Gold.class, RenderCowGold::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityBeating.class, RenderBeating::new);
 	}
 	//实体注册轮子
 	private static EntityEntry EntitiesBuild(Class<? extends Entity> entityClass, String entityName){

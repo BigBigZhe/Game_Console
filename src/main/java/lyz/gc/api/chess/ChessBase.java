@@ -5,7 +5,7 @@ public enum ChessBase {
     ;
 
     private final String name;
-    private int health, walkSpeed, attackSpeed, damage, magicDamage, attackDistance, criticalChance, criticalDamage, armor, spellResistance;
+    public int health, walkSpeed, attackSpeed, damage, magicDamage, attackDistance, criticalChance, criticalDamage, armor, spellResistance;
 
     ChessBase(String name, int health, int walkSpeed, int attackSpeed, int damage,
               int magicDamage, int attackDistance, int criticalChance, int criticalDamage, int armor, int spellResistance) {
@@ -32,43 +32,4 @@ public enum ChessBase {
         return this.name;
     }
 
-    public int getHealth() {
-        return health;
-    }
-
-    public int getWalkSpeed() {
-        return walkSpeed;
-    }
-
-    public int getAttackSpeed() {
-        return attackSpeed;
-    }
-
-    public int getAttackPower() {
-        return damage;
-    }
-
-    public int getMagicPower() {
-        return magicDamage;
-    }
-
-    public int getAttackDistance() {
-        return attackDistance;
-    }
-
-    public int getCriticalChance() {
-        return criticalChance;
-    }
-
-    public int getCriticalDamage() {
-        return criticalDamage;
-    }
-
-    public int getArmor() {
-        return armor;
-    }
-
-    public int getSpellResistance() {
-        return spellResistance;
-    }
 }

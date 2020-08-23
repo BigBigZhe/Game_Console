@@ -23,7 +23,7 @@ public class EntityBase extends EntityAnimal {
     private EntityPlayer player;//棋子拥有人
     private EntityItem entityItem;
     private boolean canPick;//是否可以拾起
-    private int[] xy = new int[2];
+    private int[] xy = new int[2];//位置
     private Weapon[] weapons = new Weapon[3];//装备
 
     public EntityBase(World worldIn, EntityItem item) {
@@ -114,5 +114,6 @@ public class EntityBase extends EntityAnimal {
 
     public void setWeapon(Weapon weapon, int dex) { this.weapons[dex] = weapon; }
 
+    public Weapon[] getWeapons() { return weapons; }
     //////////////////////////////////////////////////////////////////////
 }
