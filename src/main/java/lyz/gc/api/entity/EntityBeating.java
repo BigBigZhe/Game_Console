@@ -12,8 +12,12 @@ public class EntityBeating extends EntityLiving {
 
     public static final DataParameter<Boolean> AFIRE = EntityDataManager.createKey(EntityBeating.class, DataSerializers.BOOLEAN);
     public ChessBase chessBase;
-    public Weapon[] weapon;
+    public Weapon[] weapon = new Weapon[]{Weapon.NONE, Weapon.NONE, Weapon.NONE};
     public int variety, occupation, ownNum, enemyNum;
+
+    public EntityBeating(World worldIn){
+        super(worldIn);
+    }
 
     public EntityBeating(World worldIn, int[] chessSwitch, int ownNum, int enemyNum, ChessBase chessBase, Weapon[] weapon) {
         super(worldIn);

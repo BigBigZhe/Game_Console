@@ -24,15 +24,12 @@ public class EntityBase extends EntityAnimal {
     private EntityItem entityItem;
     private boolean canPick;//是否可以拾起
     private int[] xy = new int[2];//位置
-    private Weapon[] weapons = new Weapon[3];//装备
+    private Weapon[] weapons = new Weapon[]{Weapon.NONE, Weapon.NONE, Weapon.NONE};//装备
 
     public EntityBase(World worldIn, EntityItem item) {
         super(worldIn);
         this.entityItem = item;
         this.canPick = true;
-        for (Weapon weapon:weapons){
-            weapon = Weapon.NONE;
-        }
         this.setSize(0.7F, 0.7F);
     }
 
@@ -41,7 +38,7 @@ public class EntityBase extends EntityAnimal {
         if (!world.isRemote && canPick /* && player == this.player*/){//TODO
             ItemStack itemStack = player.getHeldItem(hand);
             if (itemStack.getItem() == ItemsLoader.STAFF){
-                player.setHeldItem(hand, new ItemStack(entityItem.setOwnPlayer(player, this.xy)));
+                player.setHeldItem(hand, new ItemStack(entityItem.setOwnPlayer(player, this.xy, this.weapons)));
                 world.removeEntity(this);
                 TileEntity entity = world.getTileEntity(this.getPosition().offset(EnumFacing.DOWN));
                 if (entity instanceof TileEntityAttackBlock){

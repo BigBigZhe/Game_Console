@@ -4,6 +4,7 @@ import lyz.gc.ModIntegers;
 import lyz.gc.api.GameMath;
 import lyz.gc.api.chess.ChessBase;
 import lyz.gc.api.chess.PlayerInfo;
+import lyz.gc.api.chess.Weapon;
 import lyz.gc.api.entity.EntityBase;
 import lyz.gc.api.entity.EntityBeating;
 import lyz.gc.entities.ZombieFashion;
@@ -65,7 +66,7 @@ public class TileEntityGameCore extends TileEntity implements ITickable {
         for (PlayerInfo playerInfo: players) {
             playerInfo = new PlayerInfo();
         }
-        changeChessTo();
+        doTolerant();
         /*EntityPlayer entityPlayer = world.getPlayerEntityByUUID(names[0]);
         BlockPos pos = this.pos;
         MessageTpPlayer message = new MessageTpPlayer(pos, names[0]);
@@ -246,9 +247,9 @@ public class TileEntityGameCore extends TileEntity implements ITickable {
                         + Math.pow(this.pos.getZ() + 2.5 * Math.sin(chosenLocation[j]) - player.getPosition().getZ(), 2) <= 0.5
                         && chooseEntities[j] != null){
                             world.removeEntity(chooseEntities[j]);
-                            chooseEntities[j] = null;
                             player.setHeldItem(player.getActiveHand(),
-                                    new ItemStack(ItemsLoader.ZF1.setOwnPlayer(player, new int[]{0, 1})));//TODO
+                                    new ItemStack(ItemsLoader.ZF1.setOwnPlayer(player, new int[]{0, 1}, chooseEntities[j].getWeapons())));//TODO
+                            chooseEntities[j] = null;
                         }
                     }
                 }
@@ -276,27 +277,49 @@ public class TileEntityGameCore extends TileEntity implements ITickable {
     }
 
     private void doTolerant(){
-        for (UUID uuid:names){
-            EntityPlayer player = world.getPlayerEntityByUUID(uuid);
+        for (int i = 0; i < 8; i++){
+            EntityPlayer player = world.getPlayerEntityByUUID(names[i]);
             if (player != null){
                 ItemStack stack = player.getHeldItemMainhand();
                 if (stack.getItem() == ItemsLoader.ZF1){
                     player.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(ItemsLoader.STAFF));
                     int[] xy = ((EntityItem)stack.getItem()).getPos();
+                    int x = 0, y = 0;
+                    if (i > 2){
+                        x++;
+                    }
+                    if (i > 4){
+                        x++;
+                    }
+                    if (i == 1 || i == 6){
+                        y = 1;
+                    }else if (i == 2 || i == 4 || i == 7){
+                        y = 2;
+                    }
                     int[] offsetX = {-21, -4, 13};
                     int offsetY = -8;
                     int[] offsetZ = {-20, -4, 12};
-                    /*BlockPos normalPos = this.pos.offset(EnumFacing.EAST, offsetX[i])
-                                    .offset(EnumFacing.UP, offsetY).offset(EnumFacing.SOUTH, offsetZ[j]);
+                    BlockPos normalPos = this.pos.offset(EnumFacing.EAST, offsetX[x])
+                                    .offset(EnumFacing.UP, offsetY).offset(EnumFacing.SOUTH, offsetZ[y]);
                     for (int k = 0; k < 8; k++) {
                         for (int l = 0; l < 9; l++) {
                             BlockPos blockPos = normalPos.offset(EnumFacing.EAST, k).offset(EnumFacing.SOUTH, l);
                             TileEntity entity = world.getTileEntity(blockPos);
                             if (entity instanceof TileEntityAttackBlock){
-                                ((TileEntityAttackBlock)entity).setCanMove(move);
+                                ((TileEntityAttackBlock)entity).setHasChess(true);
+                                ZombieFashion zombieFashion = new ZombieFashion(world);
+                                zombieFashion.setPlayer(world.getPlayerEntityByUUID(names[i]));
+                                zombieFashion.setPosition(normalPos.getX(), normalPos.getY() + 1, normalPos.getZ());
+                                zombieFashion.setInvisible(true);
+                                zombieFashion.setCanPick(false);
+                                zombieFashion.setXy(new int[]{k, l});
+                                world.spawnEntity(zombieFashion);
                             }
+                            EntityBeating beating = new EntityBeating(world, ModIntegers.CHICKEN_GOLD, i, -1, ChessBase.Base, new Weapon[]{Weapon.NONE, Weapon.NONE, Weapon.NONE}/*zombie.getWeapons()*/);//TODO
+                            beating.setPosition(normalPos.getX(), normalPos.getY() + 1, normalPos.getZ());
+                            world.spawnEntity(beating);
                         }
-                    }*/
+                    }
                 }
             }
         }
@@ -318,7 +341,7 @@ public class TileEntityGameCore extends TileEntity implements ITickable {
     private void resetChess(){
         //TODO
     }
-    //对战开始
+    //对战开始ChessBase换ChessBeating
     private void changeChessTo(){
         int[] offsetX = {-21, -4, 13};
         int offsetY = -8;
@@ -335,11 +358,11 @@ public class TileEntityGameCore extends TileEntity implements ITickable {
                         if (entity instanceof TileEntityAttackBlock){
                             TileEntityAttackBlock tile = (TileEntityAttackBlock)entity;
                             if (tile.isHasChess()){
-                                BlockPos poses = blockPos.add(0.5D, 1.0D, 0.5D);
+                                BlockPos poses = blockPos.up();//blockPos.add(0.5D, 1.0D, 0.5D);
                                 ZombieFashion zombie = world.getEntitiesWithinAABB(ZombieFashion.class, new AxisAlignedBB(poses)).get(0);
                                 if (zombie != null) {
                                     zombie.setInvisible(true);
-                                    EntityBeating beating = new EntityBeating(world, ModIntegers.CHICKEN_GOLD, getPlayerNumber(zombie.getPlayer()), -1, ChessBase.Base, zombie.getWeapons());
+                                    EntityBeating beating = new EntityBeating(world, ModIntegers.CHICKEN_GOLD, getPlayerNumber(zombie.getPlayer()), -1, ChessBase.Base, new Weapon[]{Weapon.NONE, Weapon.NONE, Weapon.NONE}/*zombie.getWeapons()*/);//TODO
                                     beating.setPosition(poses.getX(), poses.getY(), poses.getZ());
                                     world.spawnEntity(beating);
                                 }

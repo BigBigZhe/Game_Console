@@ -20,18 +20,15 @@ public class EntityItem extends ItemBase {
 
     private EntityPlayer ownPlayer;//棋子拥有人
     private int[] nxy = new int[3];//num x y
-    private Weapon[] weapons = new Weapon[3];//装备
+    private Weapon[] weapons = new Weapon[]{Weapon.NONE, Weapon.NONE, Weapon.NONE};//装备
     private int type;
 
     public EntityItem(String name) {
         super(name);
-        for (Weapon weapon:weapons){
-            weapon = Weapon.NONE;
-        }
         ItemsLoader.ITEMS.add(this);
     }
 
-    public EntityItem setOwnPlayer(EntityPlayer ownPlayer, int[] xy) {
+    public EntityItem setOwnPlayer(EntityPlayer ownPlayer, int[] xy, Weapon[] weapons) {
         this.ownPlayer = ownPlayer;
         World world = ownPlayer.world;
         TileEntity tileEntity = world.getTileEntity(new BlockPos(20, 4, 5));
@@ -40,6 +37,9 @@ public class EntityItem extends ItemBase {
             nxy[0] = tileEntityGameCore.getPlayerNumber(ownPlayer);
             nxy[1] = xy[0];
             nxy[2] = xy[1];
+            this.weapons[0] = weapons[0];
+            this.weapons[1] = weapons[1];
+            this.weapons[2] = weapons[2];
         }
         return this;
     }
